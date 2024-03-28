@@ -7,13 +7,12 @@ import java.util.Scanner;
 public class application {
     public static void main(String[] args) {
         Clientes[] arrayClientes = new Clientes[100];
-        Clientes cliente = new Clientes();
         Scanner scan = new Scanner(System.in);
         int identificadorArray = 0,
              modulo;
         do {
             System.out.println("""
-                               1- Cadastro de um novo cliente
+                               1- Cadastros
                                2- Depositar valor
                                3- Sacar valor
                                4- Transferencia de valores entre contas
@@ -23,8 +22,7 @@ public class application {
             modulo = scan.nextInt();
             switch (modulo) {
                 case 1 -> {
-                    arrayClientes[ identificadorArray ] = Clientes.adicionaCliente( cliente );
-                    identificadorArray++;
+                    Cadastros( arrayClientes, identificadorArray);
                 }
                 case 2 -> {
                     if(identificadorArray != 0  ){
@@ -57,6 +55,25 @@ public class application {
                 }
             }
         } while( modulo != 0  );
+    }
+    public static void Cadastros( Clientes[] clientes, int identificadorArray ){
+        Scanner scan = new Scanner(System.in);
+        
+        
+        System.out.println("------CADASTRO------");
+        System.out.println("1- Cadastro de Cliente \n2- Abrir uma nova conta");
+        int modulo = scan.nextInt();
+        switch( modulo){
+            case 1 ->{
+                clientes[ identificadorArray ] = Clientes.adicionaCliente();
+                identificadorArray++;
+            }
+            case 2 ->{
+                int indice = Clientes.procuraCliente( clientes );
+                Banco.adicionaContaCliente( clientes[indice]);
+                
+            }
+        }
     }
     
 }
