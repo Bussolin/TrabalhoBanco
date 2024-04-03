@@ -9,55 +9,33 @@ public class application {
         Clientes[] arrayClientes = new Clientes[100];
         Scanner scan = new Scanner(System.in);
         int identificadorArray = 0,
-             modulo;
+            modulo;
         do {
-            System.out.println("""
-                               1- Cadastros
-                               2- Depositar valor
-                               3- Sacar valor
-                               4- Transferencia de valores entre contas
-                               5- Soma total dos valores dos clientes
-                               6- Remover um cliente
-                               0- Sair""");
+            Menu();
             modulo = scan.nextInt();
+            
             switch (modulo) {
                 case 1 -> {
                     identificadorArray = Cadastros( arrayClientes, identificadorArray);
                 }
                 case 2 -> {
-                    if(identificadorArray != 0  ){
-                        if( Banco.DepositoCliente( arrayClientes ) ){
-                            System.out.println("Deposito realizado com sucesso");
-                        }else{
-                            System.out.println("Cliente ou conta nao encontrado");
-                        }
-                    }else{
-                        System.out.println("Cadastre um cliente antes de fazer uma acao");
-                    }
+                    Banco.DepositoCliente( arrayClientes );
                 }
                 case 3 -> {
-                    if(identificadorArray != 0  ){
-                        if( Banco.SaqueCliente( arrayClientes ) ){
-                            System.out.println("Saque realizado com sucesso");
-                        }
-                    }else{
-                        System.out.println("Cadastre um cliente antes de fazer uma acao");
-                    }
+                    Banco.SaqueCliente( arrayClientes );
                 }
                 case 4 -> {
-                    if( Banco.transferenciaValor( arrayClientes )) {
-                        System.out.println("Transferencia concluida com sucesso");
-                    }else{
-                        System.out.println("Falha ao transferir saldo");
-                    }
+                    Banco.transferenciaValor( arrayClientes );
                 }
                 case 5 -> System.out.println("Soma total dos valores dos clientes: " + Banco.getSaldoTotal( arrayClientes) );
                 case 6 -> Banco.removeClient();
                 default -> {
+                    System.out.println("Modulo nao implementado");;
                 }
             }
         } while( modulo != 0  );
     }
+    
     public static int Cadastros( Clientes[] clientes, int identificadorArray ){
         Scanner scan = new Scanner(System.in);
         
@@ -68,16 +46,26 @@ public class application {
         switch( modulo){
             case 1 ->{
                 clientes[ identificadorArray ] = Clientes.adicionaCliente();
-                identificadorArray++;
-               
+                if(clientes[ identificadorArray ] != null){
+                    identificadorArray++;                    
+                }
             }
             case 2 ->{
                 int indice = Clientes.procuraCliente( clientes );
                 Banco.adicionaContaCliente( clientes[indice]);
-                
             }
         }
         return identificadorArray;
     }
     
+    public static void Menu(){
+        System.out.println("""
+                               1- Cadastros
+                               2- Depositar valor
+                               3- Sacar valor
+                               4- Transferencia de valores entre contas
+                               5- Soma total dos valores dos clientes
+                               6- Remover um cliente
+                               0- Sair""");
+    }
 }
