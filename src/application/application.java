@@ -22,12 +22,14 @@ public class application {
             modulo = scan.nextInt();
             switch (modulo) {
                 case 1 -> {
-                    Cadastros( arrayClientes, identificadorArray);
+                    identificadorArray = Cadastros( arrayClientes, identificadorArray);
                 }
                 case 2 -> {
                     if(identificadorArray != 0  ){
                         if( Banco.DepositoCliente( arrayClientes ) ){
                             System.out.println("Deposito realizado com sucesso");
+                        }else{
+                            System.out.println("Cliente ou conta nao encontrado");
                         }
                     }else{
                         System.out.println("Cadastre um cliente antes de fazer uma acao");
@@ -56,7 +58,7 @@ public class application {
             }
         } while( modulo != 0  );
     }
-    public static void Cadastros( Clientes[] clientes, int identificadorArray ){
+    public static int Cadastros( Clientes[] clientes, int identificadorArray ){
         Scanner scan = new Scanner(System.in);
         
         
@@ -67,6 +69,7 @@ public class application {
             case 1 ->{
                 clientes[ identificadorArray ] = Clientes.adicionaCliente();
                 identificadorArray++;
+               
             }
             case 2 ->{
                 int indice = Clientes.procuraCliente( clientes );
@@ -74,6 +77,7 @@ public class application {
                 
             }
         }
+        return identificadorArray;
     }
     
 }

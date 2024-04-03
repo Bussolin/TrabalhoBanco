@@ -27,24 +27,22 @@ public class Clientes {
             return false;
         }
     }
-    public boolean depositar( float valorADepositar){
-        setSaldo( getSaldo() + valorADepositar );
+    public boolean depositar( int indice, float valorADepositar){
+        setContasValor( indice, getSaldo() + valorADepositar );
         return true;
     }
 
     public static Clientes adicionaCliente(){
         int modulo;
         Scanner scan = new Scanner( System.in );
-        Clientes cliente;
-
+        
         System.out.println("\n1-Cadastro cliente fisico\n2-Cadastro cliente juridico");
         modulo = scan.nextInt();
         if( modulo == 1 ){
-            cliente = cadastraClienteFisico();
+            return cadastraClienteFisico();
         }else{
-            cliente = cadastraClienteJuridico();
+            return cadastraClienteJuridico();
         }
-        return cliente;
     }
     
     private static Clientes cadastraClienteFisico(){
@@ -118,6 +116,10 @@ public class Clientes {
 
     public void setContas(Banco conta, int indice) {
         this.contas[indice] = conta;
+    }
+    
+    public void setContasValor( int indice, float valor) {
+        this.contas[indice].setSaldo(valor );
     }
 
     public int getIdentificador() {

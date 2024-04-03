@@ -32,33 +32,59 @@ public class Banco {
         tipoConta = scan.nextInt();
         if( tipoConta > 3 || tipoConta < 1){
             System.out.println("Tipo de conta inexsistente");
+            
+        }else{
+            System.out.println("Digite o numero da conta: ");
+            numeroConta = scan.nextInt();
 
+            Banco conta = new Banco( numeroConta );
+
+            if( cliente.getContas( tipoConta ) == null ){
+                cliente.setContas( conta, tipoConta - 1 );
+                System.out.println("\nConta criada\n");
+                System.out.println(cliente.getContas(tipoConta - 1));
+            }
         }
 
-        System.out.println("Digite o numero da conta: ");
-        numeroConta = scan.nextInt();
-        
-        Banco conta = new Banco( numeroConta );
-        
-        if( cliente.getContas( tipoConta ) == null ){
-            cliente.setContas( conta, tipoConta);
-            System.out.println("\nConta criada\n");
-            System.out.println(cliente.getContas(tipoConta));
-        }  
+         
     }
+    
+    //Contas
+    public static int  escolherConta ( Clientes[] cliente, int indice ){
+        
+        if(indice == -1){
+            return -1;
+        }
+        
+        for(int i = 0; i < 3; i++){
+            Banco conta = cliente[indice].getContas(i);
+            if(  !(conta == null) ){
+                System.out.println(i + 1 + ": ");
+                System.out.println(conta );
+            }
+            
+        }
+        Scanner scan = new Scanner(System.in);
+        
+        System.out.println("Escolha a conta: ");
+        int indiceConta = scan.nextInt();
+        
+        return indiceConta - 1;
+    }
+    
     public static boolean removeClient(){
         //retira a conta do cliente
         return false;
     }
     //Necessario trocar regra de conta do cliente/saldo em todo e qualquer lugar
     public static boolean DepositoCliente( Clientes[] arrayCliente){
-        int indice;
         Scanner scan = new Scanner(System.in);
 
-        indice = Clientes.procuraCliente( arrayCliente );
-        if( indice != -1){
+        int indiceCliente = Clientes.procuraCliente(arrayCliente);
+        int indiceConta = escolherConta( arrayCliente, indiceCliente );
+        if( indiceCliente != -1 && indiceConta != -1){
             System.out.println("Valor a depositar:");
-            arrayCliente[indice].depositar(scan.nextFloat());
+            arrayCliente[indiceCliente].depositar(indiceConta, scan.nextFloat());
             return true;
         }
         return false;
@@ -98,7 +124,7 @@ public class Banco {
         valorTransferido = scan.nextFloat();
 
         if (arrayCliente[indiceCliente1].sacar( valorTransferido ) ) {
-            arrayCliente[indiceCliente2].depositar( valorTransferido);
+            //arrayCliente[indiceCliente2].depositar( valorTransferido);
             return true;
         }else{
             return false;
