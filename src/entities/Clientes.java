@@ -8,7 +8,7 @@ public class Clientes {
         private String tipo;
         private String nome;
         private String documento;
-        private final Banco[] contas = new Banco[3];
+        private Banco[] contas = new Banco[3];
         private float saldo;
 
     public Clientes(int identificador, String tipo, String nome, String documento ) {
@@ -22,14 +22,13 @@ public class Clientes {
     public boolean sacar( float valorSacar){
         if( this.saldo >= valorSacar ){
             setSaldo( this.saldo -= valorSacar );
-            return true;
-        }else{
-            return false;
+            return true;    
         }
+        return false;
     }
-    public boolean depositar( int indice, float valorADepositar){
-        setContasValor( indice, getSaldo() + valorADepositar );
-        return true;
+    
+    public void depositar( int indice, float valorADepositar){
+        setContasValor( indice, this.contas[indice].getSaldo() + valorADepositar );
     }
 
     public static Clientes adicionaCliente(){
@@ -38,10 +37,18 @@ public class Clientes {
         
         System.out.println("\n1-Cadastro cliente fisico\n2-Cadastro cliente juridico");
         modulo = scan.nextInt();
-        if( modulo == 1 ){
-            return cadastraClienteFisico();
-        }else{
-            return cadastraClienteJuridico();
+        switch( modulo ){
+            case 1->{
+                return cadastraClienteFisico();
+            }
+            
+            case 2->{
+                return cadastraClienteJuridico();
+            }
+            default->{
+                System.out.println("Tipo inexsistente");
+                return null;
+            }
         }
     }
     
@@ -72,6 +79,7 @@ public class Clientes {
         System.out.println("\n----CADASTRO CLIENTE JURIDICO----\n ");
         System.out.println("Idenficador:");
         id = scan.nextInt();
+        scan.nextLine();
         System.out.println("Nome Fantasia: ");
         nome = scan.nextLine();
         System.out.println("CNPJ: ");
@@ -102,24 +110,25 @@ public class Clientes {
             System.out.println("-------------------------");
             System.out.println(cliente);
         }
-
     }
 
     @Override
     public String toString() {
         return "Cliente: \nID: " + identificador + ",   Tipo: " + tipo + "\nNome: " + nome + ",  Documento: " + documento + ", Saldo: " + saldo;
     }
-
-    public Banco getContas( int indice ) {
-        return contas[ indice ];
-    }
-
-    public void setContas(Banco conta, int indice) {
-        this.contas[indice] = conta;
-    }
     
+    public Banco[] getContas() {
+        return contas;
+    }
+
+    public void setContas(Banco[] contas ) {
+        this.contas = contas;
+    }
+    //0 - Poupança
+    //1 - Corrente
+    //2 - Investimento
     public void setContasValor( int indice, float valor) {
-        this.contas[indice].setSaldo(valor );
+        this.contas[indice].setSaldo( valor );
     }
 
     public int getIdentificador() {
