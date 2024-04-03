@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class application {
     public static void main(String[] args) {
         Clientes[] arrayClientes = new Clientes[100];
+        
         Scanner scan = new Scanner(System.in);
         int identificadorArray = 0,
             modulo;
@@ -16,6 +17,7 @@ public class application {
             
             switch (modulo) {
                 case 1 -> {
+                    LimpaTela();
                     identificadorArray = Cadastros( arrayClientes, identificadorArray);
                 }
                 case 2 -> {
@@ -67,5 +69,14 @@ public class application {
                                5- Soma total dos valores dos clientes
                                6- Remover um cliente
                                0- Sair""");
+    }
+    
+    public static void LimpaTela(){
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+
     }
 }

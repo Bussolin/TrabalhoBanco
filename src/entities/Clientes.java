@@ -19,12 +19,10 @@ public class Clientes {
         this.saldo = 0;
     }
     
-    public boolean sacar( float valorSacar){
-        if( this.saldo >= valorSacar ){
-            setSaldo( this.saldo -= valorSacar );
-            return true;    
+    public void sacar( int indice, float valorSacar){
+        if( this.contas[indice].getSaldo() >= valorSacar){
+            setContasValor( indice, this.contas[indice].getSaldo() - valorSacar );
         }
-        return false;
     }
     
     public void depositar( int indice, float valorADepositar){
