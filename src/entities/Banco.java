@@ -36,106 +36,133 @@ public class Banco {
         }else{
             System.out.println("Digite o numero da conta: ");
             numeroConta = scan.nextInt();
-
-            Banco conta = new Banco( numeroConta );
-
-            if( cliente.getContas( tipoConta ) == null ){
-                cliente.setContas( conta, tipoConta - 1 );
-                System.out.println("\nConta criada\n");
-                System.out.println(cliente.getContas(tipoConta - 1));
-            }
-        }
-
-         
-    }
-    
-    //Contas
-    public static int  escolherConta ( Clientes[] cliente, int indice ){
-        
-        if(indice == -1){
-            return -1;
-        }
-        
-        for(int i = 0; i < 3; i++){
-            Banco conta = cliente[indice].getContas(i);
-            if(  !(conta == null) ){
-                System.out.println(i + 1 + ": ");
-                System.out.println(conta );
-            }
             
+            Banco[] contas = cliente.getContas();
+            
+            if( contas[tipoConta - 1] == null ){
+                contas[ tipoConta - 1 ] = new Banco( numeroConta );
+                cliente.setContas( contas );
+                
+                System.out.println("\nConta criada\n");
+                System.out.println( contas[tipoConta - 1] + "\n" );
+            }
         }
-        Scanner scan = new Scanner(System.in);
-        
-        System.out.println("Escolha a conta: ");
-        int indiceConta = scan.nextInt();
-        
-        return indiceConta - 1;
     }
     
     public static boolean removeClient(){
         //retira a conta do cliente
         return false;
     }
-    //Necessario trocar regra de conta do cliente/saldo em todo e qualquer lugar
-    public static boolean DepositoCliente( Clientes[] arrayCliente){
+    
+    public static int  escolherConta ( Clientes[] cliente, int indiceCliente ){
+        
+        int contas = 0;
+        Banco[] contasArray = cliente[indiceCliente].getContas();
+        
+        for(int i = 0; i < 3; i++){
+            if(  !(contasArray[i] == null) ){
+                System.out.println(i + 1 + ": ");
+                System.out.println(contasArray[i] );
+                contas++;
+            }
+        }
+        
+        if ( contas == 0){
+            System.out.println("Nenhuma conta cadastrada");
+            return -1;
+        }
         Scanner scan = new Scanner(System.in);
-
+        System.out.println("Escolha a conta: ");
+        int indiceConta = scan.nextInt();
+        
+        if( contasArray[indiceConta -1] != null ){
+            return indiceConta - 1;
+        }else{
+            return -1;
+        }
+        
+    }
+    
+    public static void DepositoCliente( Clientes[] arrayCliente){
+        Scanner scan = new Scanner(System.in);
+        
         int indiceCliente = Clientes.procuraCliente(arrayCliente);
+        if( indiceCliente == -1){
+            return;
+        }
+        
         int indiceConta = escolherConta( arrayCliente, indiceCliente );
         if( indiceCliente != -1 && indiceConta != -1){
             System.out.println("Valor a depositar:");
             arrayCliente[indiceCliente].depositar(indiceConta, scan.nextFloat());
-            return true;
+            System.out.println("Deposito realizado com sucesso");
         }
-        return false;
     }
-    public static boolean SaqueCliente( Clientes[] arrayCliente){
-        int indice;
-        Scanner scan = new Scanner(System.in);
-
-        indice = Clientes.procuraCliente( arrayCliente );
+    //Necessario trocar regra de conta do cliente/saldo em todo e qualquer lugar
+    public static void SaqueCliente( Clientes[] arrayCliente){
+        int indice = Clientes.procuraCliente( arrayCliente );
         if( indice != -1){
-            System.out.println("Valor a sacar:");
-            if( !arrayCliente[indice].sacar(scan.nextFloat())){
-                 System.out.println("Saldo insuficiente");
-                 return false;
-            }             
-            return true;
+            return;
         }
-        return false;
+        float saldoAntigo = arrayCliente[indice].getSaldo();
+        
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Valor a sacar:");
+        float saldoSacar = scan.nextFloat();
+        
+        arrayCliente[indice].sacar( saldoSacar );
+        
+        if( saldoAntigo == arrayCliente[indice].getSaldo()){
+            System.out.println("Saldo insuficiente");
+        }else{
+            System.out.println("Saque realizado com sucesso");
+        }
     }
-    public static boolean transferenciaValor( Clientes[] arrayCliente){
+    //Necessario trocar regra de conta do cliente/saldo em todo e qualquer lugar
+    public static void transferenciaValor( Clientes[] arrayCliente){
         int indiceCliente1, indiceCliente2;
-        float valorTransferido;
+
+        System.out.println("\n------TRANSFERÊNCIA------");
+        System.out.println("Cliente origem: ");
+        indiceCliente1 = Clientes.procuraCliente( arrayCliente );
+        if( indiceCliente1 == -1){
+            return;
+        }
+        
+        System.out.println("Cliente destino: ");
+        indiceCliente2 = Clientes.procuraCliente( arrayCliente );
+        if( indiceCliente2 == -1){
+            return;
+        }
+        int indiceConta = 0;
+        float valorTransferido, saldoAntigo;
         Scanner scan = new Scanner(System.in);
 
-        System.out.println("Cliente que ira transferir: ");
-        indiceCliente1 = Clientes.procuraCliente( arrayCliente );
-       if( indiceCliente1 == -1){
-           return false;
-       }
-       System.out.println("Cliente que recebera valor: ");
-       indiceCliente2 = Clientes.procuraCliente( arrayCliente );
-       if( indiceCliente2 == -1){
-           return false;
-       }
-
-        System.out.println("Valor a ser depositado:");
+        System.out.println("Valor a ser transferido:");
         valorTransferido = scan.nextFloat();
-
-        if (arrayCliente[indiceCliente1].sacar( valorTransferido ) ) {
-            //arrayCliente[indiceCliente2].depositar( valorTransferido);
-            return true;
+        saldoAntigo = arrayCliente[indiceCliente1].getSaldo();
+        arrayCliente[indiceCliente1].sacar( valorTransferido );
+        
+        if ( !(saldoAntigo == arrayCliente[ indiceCliente1 ].getSaldo()) ) {
+            arrayCliente[indiceCliente2].depositar( indiceConta, valorTransferido);
+            System.out.println("Transferencia concluida com sucesso");
         }else{
-            return false;
+            System.out.println("Saldo insuficiente");
         }
     }
     public static float getSaldoTotal( Clientes[] arrayClientes ){
         float saldoTotal = 0;
 
         for( Clientes cliente : arrayClientes){
-            if( cliente != null ){
-                saldoTotal += cliente.getSaldo();
+            if( cliente == null ){
+                return saldoTotal;
+            }
+            Banco[] contas = cliente.getContas();
+            for( int i = 0; i < 3; i++ ){
+                    if( contas[i]  == null ){
+                        continue;
+                    }
+                    saldoTotal += contas[i].getSaldo();
             }
         }
         return saldoTotal;
