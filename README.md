@@ -17,7 +17,7 @@ O sistema inclui as seguintes funcionalidades:
 O projeto está organizado da seguinte maneira:
 
 - `src/`: Contém o código-fonte do projeto.
-    -  `entiteis/`: Pacote de entidades do projeto.   
+    -  `entities/`: Pacote de entidades do projeto.   
         - `Cliente.java`: Classe que representa um cliente do banco.
         - `banco.java`: Classe que realiza operações do banco.
     -  `application/`: Pacote de execução.   
