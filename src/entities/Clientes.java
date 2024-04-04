@@ -9,22 +9,18 @@ public class Clientes {
         private String nome;
         private String documento;
         private Banco[] contas = new Banco[3];
-        private float saldo;
 
     public Clientes(int identificador, String tipo, String nome, String documento ) {
         this.identificador = identificador;
         this.tipo = tipo;
         this.nome = nome;
         this.documento = documento;
-        this.saldo = 0;
     }
     
-    public boolean sacar( float valorSacar){
-        if( this.saldo >= valorSacar ){
-            setSaldo( this.saldo -= valorSacar );
-            return true;    
+    public void sacar( int indice, float valorSacar){
+        if( this.contas[indice].getSaldo() >= valorSacar){
+            setContasValor( indice, this.contas[indice].getSaldo() - valorSacar );
         }
-        return false;
     }
     
     public void depositar( int indice, float valorADepositar){
@@ -71,6 +67,7 @@ public class Clientes {
         return c;
 
     }
+    
     private static Clientes cadastraClienteJuridico(){
         Scanner scan = new Scanner(System.in);
         int id;
@@ -88,14 +85,15 @@ public class Clientes {
         Clientes c = new Clientes(id, "Juridico", nome, documento);
         return c;
     }
+    
     public static int procuraCliente( Clientes[] arrayCliente ){
-        int indice, id;
+        int id;
         Scanner scan = new Scanner(System.in);
 
         System.out.println("Identificador do cliente: ");
         id = scan.nextInt();
 
-        for( indice = 0; indice < arrayCliente.length; indice++ ){
+        for( int indice = 0; indice < arrayCliente.length; indice++ ){
             if( arrayCliente[indice] != null){
                 if( id == arrayCliente[indice].getIdentificador()){
                     return indice;
@@ -105,16 +103,26 @@ public class Clientes {
         System.out.println("Cliente não cadastrado");
         return -1;
     }
+    
     public static void mostraClientes( Clientes[] arrayClientes ){
+        if( arrayClientes[0] == null){
+            System.out.println("Nenhum cliente cadastrado");
+            return;
+        }
+        
         for( Clientes cliente : arrayClientes){
-            System.out.println("-------------------------");
-            System.out.println(cliente);
+            if( cliente != null){
+                System.out.println("-------------------------");
+                System.out.println(cliente);
+                System.out.println("-----CONTAS-CLIENTE------");
+                Banco.MostraContas( cliente );
+            }
         }
     }
 
     @Override
     public String toString() {
-        return "Cliente: \nID: " + identificador + ",   Tipo: " + tipo + "\nNome: " + nome + ",  Documento: " + documento + ", Saldo: " + saldo;
+        return "Cliente: \nID: " + identificador + ",   Tipo: " + tipo + "\nNome: " + nome + ",  Documento: " + documento;
     }
     
     public Banco[] getContas() {
@@ -143,9 +151,6 @@ public class Clientes {
     public String getDocumento() {
         return documento;
     }
-    public float getSaldo() {
-        return saldo;
-    }
 
     public void setIdentificador(int identificador) {
         this.identificador = identificador;
@@ -158,10 +163,5 @@ public class Clientes {
     }
     public void setDocumento(String documento) {
         this.documento = documento;
-    }
-    public void setSaldo(float saldo) {
-        if( saldo > 0){
-            this.saldo = saldo;
-        }
     }
 }

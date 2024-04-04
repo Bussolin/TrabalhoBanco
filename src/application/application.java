@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class application {
     public static void main(String[] args) {
         Clientes[] arrayClientes = new Clientes[100];
+        
         Scanner scan = new Scanner(System.in);
         int identificadorArray = 0,
             modulo;
@@ -16,21 +17,26 @@ public class application {
             
             switch (modulo) {
                 case 1 -> {
+                    LimpaTela();
                     identificadorArray = Cadastros( arrayClientes, identificadorArray);
                 }
                 case 2 -> {
-                    Banco.DepositoCliente( arrayClientes );
+                    LimpaTela();
+                    Banco.depositoCliente( arrayClientes );
                 }
                 case 3 -> {
-                    Banco.SaqueCliente( arrayClientes );
+                    LimpaTela();
+                    Banco.saqueCliente( arrayClientes );
                 }
                 case 4 -> {
+                    LimpaTela();
                     Banco.transferenciaValor( arrayClientes );
                 }
                 case 5 -> System.out.println("Soma total dos valores dos clientes: " + Banco.getSaldoTotal( arrayClientes) );
-                case 6 -> Banco.removeClient();
+                case 6 -> Banco.removeCliente( arrayClientes );
+                case 7 -> Clientes.mostraClientes( arrayClientes );
                 default -> {
-                    System.out.println("Modulo nao implementado");;
+                    System.out.println("Modulo nao implementado");
                 }
             }
         } while( modulo != 0  );
@@ -66,6 +72,13 @@ public class application {
                                4- Transferencia de valores entre contas
                                5- Soma total dos valores dos clientes
                                6- Remover um cliente
+                               7- Informacoes clientes
                                0- Sair""");
+    }
+    
+    public static void LimpaTela(){
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
     }
 }
