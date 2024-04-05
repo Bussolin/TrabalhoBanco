@@ -63,6 +63,8 @@ public class Banco {
             for( int i = indiceCliente; i < clientes.length; i++){
                 if( i != clientes.length - 1){
                     clientes[ i ] = clientes[ i + 1];
+                }else{
+                    clientes[ i ] = null;
                 }
             }
             System.out.println("Cliente excluido com sucesso");
